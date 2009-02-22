@@ -99,7 +99,7 @@ def doctest(*paths, **kwargs):
     if len(paths) > 0:
         t.add_paths(paths)
     else:
-        t.add_paths(["sympy"])
+        t.add_paths(["qsnake"])
     return t.test()
 
 
@@ -688,7 +688,12 @@ def main():
     ok = test(*args, **{"verbose": options.verbose, "kw": options.kw,
         "tb": options.tb, "pdb": options.pdb, "colors": options.colors})
     if ok:
-        sys.exit(0)
+        ok = doctest(*args, **{"verbose": options.verbose, "kw": options.kw,
+            "tb": options.tb, "pdb": options.pdb, "colors": options.colors})
+        if ok:
+            sys.exit(0)
+        else:
+            sys.exit(1)
     else:
         sys.exit(1)
 

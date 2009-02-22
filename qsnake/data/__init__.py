@@ -27,11 +27,11 @@ def number2symbol(Z):
 
     Example:
     >>> number2symbol(1)
-    H
+    'H'
     >>> number2symbol(2)
-    He
+    'He'
     >>> number2symbol(35)
-    Br
+    'Br'
     """
     global _symbols
     if _symbols is None:
@@ -56,11 +56,11 @@ def number2name(Z):
 
     Example:
     >>> number2name(1)
-    Hydrogen
+    'Hydrogen'
     >>> number2name(2)
-    Helium
+    'Helium'
     >>> number2name(35)
-    Bromine
+    'Bromine'
     """
     global _names
     if _names is None:
