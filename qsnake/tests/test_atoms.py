@@ -10,3 +10,13 @@ def test_basic1():
     assert atoms[1] == a2
     assert atoms[2] == a3
     assert atoms.get_atomic_numbers() == [1, 1, 8]
+
+def test_str():
+    a1 = Atom("H", (0, 0, 0))
+    a2 = Atom("H", (0, 0, 1))
+    a3 = Atom("O", (1, 0, 1))
+    atoms = Atoms([a1, a2, a3])
+    s = str(atoms)
+    assert s.find("H") != -1
+    assert s.find("O") != -1
+    assert s.find("Br") == -1
