@@ -23,4 +23,4 @@ class Atom(object):
         return number2name(self._Z)
 
     def __str__(self):
-        return "<%d: %s>" % (number2symbol(self._Z), self._position)
+        return "<%s: %s>" % (number2symbol(self._Z), self._position)

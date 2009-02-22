@@ -29,3 +29,9 @@ def test_basic3():
     assert a.number == 82
     assert a.symbol == "Pb"
     assert a.name == "Lead"
+
+def test_str():
+    a = Atom(82)
+    s = str(a)
+    assert s.find("Pb") != -1
+    assert s.find("Br") == -1
