@@ -53,5 +53,5 @@ class Atoms(object):
     def __str__(self):
         s = ""
         for a in self._atoms:
-            s += str(a)
+            s += str(a)+"\n"
         return s
