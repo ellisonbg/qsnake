@@ -12,14 +12,35 @@ class Atom(object):
 
     @property
     def number(self):
+        """
+        Returns the atomic number.
+
+        Example:
+        >>> Atom("B").number
+        5
+        """
         return self._Z
 
     @property
     def symbol(self):
+        """
+        Returns the symbol of the atom.
+
+        Example:
+        >>> Atom("B").symbol
+        'B'
+        """
         return number2symbol(self._Z)
 
     @property
     def name(self):
+        """
+        Returns the atom's name.
+
+        Example:
+        >>> Atom("B").name
+        'Boron'
+        """
         return number2name(self._Z)
 
     def __str__(self):
