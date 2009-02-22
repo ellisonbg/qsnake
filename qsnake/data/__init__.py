@@ -11,9 +11,12 @@ def symbol2number(symbol):
     >>> symbol2number("Br")
     35
     """
+    global _numbers
     if _numbers is None:
         _numbers = {}
-        for n, name in enumerate(element_symbols):
+        # initialize _symbols:
+        number2symbol(1)
+        for n, name in enumerate(_symbols):
             _numbers[name] = n+1
     return _numbers[symbol]
 
