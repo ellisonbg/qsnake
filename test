@@ -68,7 +68,7 @@ def test(*paths, **kwargs):
     if len(paths) > 0:
         t.add_paths(paths)
     else:
-        t.add_paths(["tests"])
+        t.add_paths(["qsnake"])
     return t.test()
 
 def doctest(*paths, **kwargs):
@@ -673,12 +673,6 @@ import sys
 from optparse import OptionParser
 
 def main():
-    bintest_dir = os.path.abspath(os.path.dirname(__file__))         # bin/test
-    sympy_top  = os.path.split(bintest_dir)[0]      # ../
-    sympy_dir  = os.path.join(sympy_top, 'sympy')  # ../sympy/
-    if os.path.isdir(sympy_dir):
-       sys.path.insert(0, sympy_top)
-
     parser = OptionParser()
     parser.add_option("-v", "--verbose", action="store_true", dest="verbose",
             default=False)
