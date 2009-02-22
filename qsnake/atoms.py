@@ -4,9 +4,34 @@ class Atoms(object):
         self._atoms = atom_list
 
     def __getitem__(self, key):
+        """
+        Allows to access Atoms() like a list.
+
+        Example:
+        >>> from qsnake import Atom
+        >>> a1 = Atom("H", (0, 0, 0))
+        >>> a2 = Atom("H", (0, 0, 1))
+        >>> a3 = Atom("O", (1, 0, 1))
+        >>> atoms = Atoms([a1, a2, a3])
+        >>> atoms[1] == a2
+        True
+
+        """
         return self._atoms[key]
 
     def __len__(self):
+        """
+        Returns the number of atoms.
+
+        Example:
+        >>> from qsnake import Atom
+        >>> a1 = Atom("H", (0, 0, 0))
+        >>> a2 = Atom("H", (0, 0, 1))
+        >>> a3 = Atom("O", (1, 0, 1))
+        >>> atoms = Atoms([a1, a2, a3])
+        >>> len(atoms)
+        3
+        """
         return len(self._atoms)
 
     def get_atomic_numbers(self):
