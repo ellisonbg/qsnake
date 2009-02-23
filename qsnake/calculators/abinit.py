@@ -126,6 +126,8 @@ diemac 2.0
         assert rhor_size == cplex*ngfft1*ngfft2*ngfft3*calcsize("d")
         for ispden in range(nspden):
             rhor = array(read(f, "%dd" % cplex*ngfft1*ngfft2*ngfft3))
+        rhor_size_end, = read(f, "i")
+        assert rhor_size == rhor_size_end
 
         density = []
         i = 0
