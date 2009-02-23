@@ -1,10 +1,11 @@
 from struct import calcsize, unpack
-from collections import namedtuple
-
 import os
 from tempfile import mkdtemp
+from subprocess import Popen, PIPE
 
 from numpy import array, reshape
+
+from collections import namedtuple
 
 class Abinit(object):
 
@@ -18,7 +19,16 @@ class Abinit(object):
         print "Abinit initialized with the configuration:"
         print atoms
 
+    def find_sage(self):
+        """
+        It tries to setup ._sage_path if it's None using "sage -root".
+        """
+        if self._sage_path is None:
+            path = Popen(["sage", "-root"], stdout=PIPE).communicate()[0]
+            self._sage_path = path
+
     def calculate(self):
+        self.find_sage()
         def list2str(l):
             l = [str(x) for x in l]
             return " ".join(l)
