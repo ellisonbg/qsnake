@@ -86,11 +86,15 @@ diemac 2.0
         tnons = reshape(array(read(f, "%dd" % 3*nsym)), (3, nsym))
         znucltypat = array(read(f, "%dd" % ntypat))
         wtk = array(read(f, "%dd" % nkpt))
+        unknown0, unknown01 = read(f, "di")
+        psp_size, = read(f, "i")
+        # the size of the next block:
+        assert psp_size == calcsize("2d5i")+132
         for ipsp in range(npsp):
-            title = f.read(132)
+            title = (f.read(132)).strip()
             znuclpsp, zionpsp = read(f, "2d")
             pspso, pspdat, pspcod, pspxc, lmn_size = read(f, "5i")
-        f.read(24)
+        unknown1, unknown2 = read(f, "ii")
         if usepaw == 0:
             residm, = read(f, "d")
             xred = reshape(array(read(f, "%dd" % 3*natom)), (3, natom))
