@@ -62,6 +62,21 @@ diemac 2.0
         print result["etotal"]
 
     def parse_density(self, filename):
+        """
+        Reads the density file from abinit and decodes everything there is in
+        there.
+
+        It's probably fortran implementation dependent. This method assumes,
+        that the following fortran statement:
+
+        write(unit=header) codvsn,headform,fform
+
+        Produces:
+
+        <int: size of the block> <codvsn> <headform> <fform> <int: size of the
+        block again, needs to match the first int>
+
+        """
         def read(f, fmt):
             return unpack(fmt, f.read(calcsize(fmt)))
 
