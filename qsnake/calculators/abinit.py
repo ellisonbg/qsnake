@@ -103,13 +103,12 @@ diemac 2.0
         psp_size, = read(f, "i")
         # the size of the next block:
         assert psp_size == calcsize("2d5i")+132
-        print psp_size
         for ipsp in range(npsp):
             title = (f.read(132)).strip()
             znuclpsp, zionpsp = read(f, "2d")
             pspso, pspdat, pspcod, pspxc, lmn_size = read(f, "5i")
-        unknown1, = read(f, "i")
-        print unknown1
+        psp_size_end, = read(f, "i")
+        assert psp_size == psp_size_end
         final_size, = read(f, "i")
         # the size of the next block:
         assert final_size == calcsize("d"+"%d" % (3*natom) +"d2d")
