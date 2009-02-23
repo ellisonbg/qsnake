@@ -59,12 +59,11 @@ diemac 2.0
         for l in log:
             if l.find("etotal") != -1:
                 print l
-        print result["etotal"]
+        print result["header"]["etotal"]
 
-    def parse_density(self, filename):
+    def parse_header(self, f):
         """
-        Reads the density file from abinit and decodes everything there is in
-        there.
+        Reads the header from an open file "f".
 
         It's probably fortran implementation dependent. This method assumes,
         that the following fortran statement:
@@ -80,7 +79,6 @@ diemac 2.0
         def read(f, fmt):
             return unpack(fmt, f.read(calcsize(fmt)))
 
-        f = file(filename, "rb")
         # the size of the next section:
         head_size, = read(f, "i")
         assert head_size == calcsize("2i") + 6
@@ -137,8 +135,43 @@ diemac 2.0
         else:
             raise NotImplementedError("Only reading usepaw == 0 implemented so far")
 
+        # Let's return some interesting information. We can of course return
+        # more variables above if needed.
+        result = {
+                "etotal": etotal,
+                "fermie": fermie,
+                "ngfft": array([ngfft1, ngfft2, ngfft3]),
+                "nspden": nspden
+                }
+
+        return result
+
+    def parse_density(self, filename):
+        """
+        Reads the density file from abinit and decodes everything there is in
+        there.
+
+        It's probably fortran implementation dependent. This method assumes,
+        that the following fortran statement:
+
+        write(unit=header) codvsn,headform,fform
+
+        Produces:
+
+        <int: size of the block> <codvsn> <headform> <fform> <int: size of the
+        block again, needs to match the first int>
+
+        """
+        def read(f, fmt):
+            return unpack(fmt, f.read(calcsize(fmt)))
+
+        f = file(filename, "rb")
+        header = self.parse_header(f)
+
         rhor_size, = read(f, "i")
         cplex = 1
+        ngfft1, ngfft2, ngfft3 = header["ngfft"]
+        nspden = header["nspden"]
         assert rhor_size == cplex*ngfft1*ngfft2*ngfft3*calcsize("d")
         for ispden in range(nspden):
             rhor = array(read(f, "%dd" % cplex*ngfft1*ngfft2*ngfft3))
@@ -157,8 +190,7 @@ diemac 2.0
         # more variables above if needed.
         result = {
                 "density": density,
-                "etotal": etotal,
-                "fermie": fermie,
+                "header": header,
                 }
 
         return result
