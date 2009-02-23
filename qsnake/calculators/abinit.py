@@ -55,11 +55,9 @@ diemac 2.0
             raise RuntimeError("Abinis returned: %d" % r)
 
         result = self.parse_density(tmp+"/ao_DEN")
-        log = file(tmp+"/log").readlines()
-        for l in log:
-            if l.find("etotal") != -1:
-                print l
-        print result["header"]["etotal"]
+        print "Total energy:", result["header"]["etotal"]
+        print "Fermi energy:", result["header"]["fermie"]
+        return result
 
     def parse_header(self, f):
         """
