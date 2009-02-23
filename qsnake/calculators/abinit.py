@@ -38,7 +38,7 @@ Goedecker-Teter-Hutter  Wed May  8 14:27:44 EDT 1996
         a_in = file(tmp+"/a.in", "w")
         a_in.write("""\
 acell 10 10 10
-ntypat 1
+ntypat %d
 znucl 1
 natom %d
 typat %s
@@ -49,7 +49,9 @@ nkpt 1
 nstep 10
 toldfe 1.0d-6
 diemac 2.0
-""" % (len(self._atoms), list2str(self._atoms.get_atomic_numbers()),
+""" % (self._atoms.get_number_of_types_of_atoms(),
+    len(self._atoms),
+    list2str(self._atoms.get_atomic_numbers()),
     self._atoms.get_coordinates_str()))
         a_in.close()
         print "calling abinis in '%s'" % tmp

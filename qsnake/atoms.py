@@ -76,3 +76,20 @@ class Atoms(object):
         for a in self._atoms:
             s += "%s %s %s\n" % tuple(a.position)
         return s[:-1]
+
+    def get_number_of_types_of_atoms(self):
+        """
+        Return a number of types of atoms.
+
+        >>> from qsnake import Atom
+        >>> a1 = Atom("H", (0, 0, 0))
+        >>> a2 = Atom("H", (0, 0, 1))
+        >>> a3 = Atom("O", (1, 0, 1))
+        >>> atoms = Atoms([a1, a2, a3])
+        >>> print atoms.get_number_of_types_of_atoms()
+        2
+        """
+        r = {}
+        for a in self._atoms:
+            r[a.number] = 1
+        return len(r)
