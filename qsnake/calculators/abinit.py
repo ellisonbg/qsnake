@@ -25,7 +25,9 @@ class Abinit(object):
         """
         if self._sage_path is None:
             path = Popen(["sage", "-root"], stdout=PIPE).communicate()[0]
-            self._sage_path = path
+            path = path.strip()
+            if path != "":
+                self._sage_path = path
 
     def calculate(self):
         self.find_sage()
