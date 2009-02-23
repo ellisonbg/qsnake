@@ -9,7 +9,13 @@ from collections import namedtuple
 
 class Abinit(object):
 
-    def __init__(self, sage_path=None, atoms=None):
+    def __init__(self, atoms=None, sage_path=None):
+        """
+        Creates an abinit.org calculator.
+
+        If you don't setup the sage_path path, it will find Sage automatically
+        using "sage -root" (recommended).
+        """
         if atoms is not None:
             self.init(atoms)
         self._sage_path = sage_path
