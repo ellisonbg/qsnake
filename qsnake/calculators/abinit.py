@@ -54,11 +54,12 @@ diemac 2.0
         if r != 0:
             raise RuntimeError("Abinis returned: %d" % r)
 
-        density = self.parse_density(tmp+"/ao_DEN")
+        result = self.parse_density(tmp+"/ao_DEN")
         log = file(tmp+"/log").readlines()
         for l in log:
             if l.find("etotal") != -1:
                 print l
+        print result["etotal"]
 
     def parse_density(self, filename):
         def read(f, fmt):
@@ -112,4 +113,13 @@ diemac 2.0
                 for i1 in range(ngfft1):
                     density.append([i1+1, i2+1, i3+1, rhor[i]])
                     i += 1
-        return density
+
+        # Let's return some interesting information. We can of course return
+        # more variables above if needed.
+        result = {
+                "density": density,
+                "etotal": etotal,
+                "fermie": fermie,
+                }
+
+        return result
