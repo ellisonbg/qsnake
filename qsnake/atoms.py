@@ -56,7 +56,7 @@ class Atoms(object):
             s += str(a)+"\n"
         return s
 
-    def get_coordinates(self):
+    def get_coordinates_str(self):
         """
         Return a string of coordinates of all atoms.
 
@@ -65,7 +65,7 @@ class Atoms(object):
         >>> a2 = Atom("H", (0, 0, 1))
         >>> a3 = Atom("O", (1, 0, 1))
         >>> atoms = Atoms([a1, a2, a3])
-        >>> print atoms.get_coordinates()  #doctest: +NORMALIZE_WHITESPACE
+        >>> print atoms.get_coordinates_str()  #doctest: +NORMALIZE_WHITESPACE
         0 0 0
         0 0 1
         1 0 1

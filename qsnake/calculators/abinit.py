@@ -19,6 +19,9 @@ class Abinit(object):
         print atoms
 
     def calculate(self):
+        def list2str(l):
+            l = [str(x) for x in l]
+            return " ".join(l)
         tmp = mkdtemp()
         files = file(tmp+"/a.files", "w")
         files.write("a.in\na.out\nai\nao\ntmp\n01h.pspgth")
@@ -37,17 +40,17 @@ Goedecker-Teter-Hutter  Wed May  8 14:27:44 EDT 1996
 acell 10 10 10
 ntypat 1
 znucl 1
-natom 2
-typat 1 1
+natom %d
+typat %s
 xcart
--0.7 0.0 0.0
-0.7 0.0 0.0
+%s
 ecut 10.0
 nkpt 1
 nstep 10
 toldfe 1.0d-6
 diemac 2.0
-""")
+""" % (len(self._atoms), list2str(self._atoms.get_atomic_numbers()),
+    self._atoms.get_coordinates_str()))
         a_in.close()
         print "calling abinis in '%s'" % tmp
         r = os.system("cd "+tmp+"; "+self._sage_path+"/local/bin/abinis < a.files > log")
