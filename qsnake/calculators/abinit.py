@@ -66,14 +66,25 @@ diemac 2.0
             return unpack(fmt, f.read(calcsize(fmt)))
 
         f = file(filename, "rb")
-        codvsn = f.read(18)
-        (headform, fform, bantot, date, intxc, ixc, natom, ngfft1, ngfft2,
-                ngfft3, nkpt, nspden, nspinor, nsppol, nsym, npsp, ntypat,
-                occopt, pertcase, usepaw) = read(f, "20i")
+        # the size of the next section:
+        head_size, = read(f, "i")
+        assert head_size == calcsize("2i") + 6
+        codvsn = f.read(6)
+        headform, fform = read(f, "2i")
+        head_size_end, = read(f, "i")
+        assert head_size == head_size_end
+        # the size of the next section:
+        head_size, = read(f, "i")
+        print head_size
+        assert head_size == calcsize("18i4d3d9d3d")
+        (bantot, date, intxc, ixc, natom, ngfft1, ngfft2, ngfft3, nkpt, nspden,
+            nspinor, nsppol, nsym, npsp, ntypat, occopt, pertcase, usepaw) = \
+                read(f, "18i")
         ecut, ecutdg, ecutsm, ecut_eff = read(f, "4d")
         qptn = array(read(f, "3d"))
         rprimd = reshape(array(read(f, "9d")), (3, 3))
         stmbias, tphysel, tsmear = read(f, "3d")
+        # XXX: ------ see below:
         istwfk = array(read(f, "%di" % nkpt))
         nband = array(read(f, "%di" % nkpt*nsppol))
         npwarr = array(read(f, "%di" % nkpt))
@@ -86,15 +97,19 @@ diemac 2.0
         tnons = reshape(array(read(f, "%dd" % 3*nsym)), (3, nsym))
         znucltypat = array(read(f, "%dd" % ntypat))
         wtk = array(read(f, "%dd" % nkpt))
+        # XXX: I suspect the above from the line down to here is probably
+        # shifted
         unknown0, unknown01 = read(f, "di")
         psp_size, = read(f, "i")
         # the size of the next block:
         assert psp_size == calcsize("2d5i")+132
+        print psp_size
         for ipsp in range(npsp):
             title = (f.read(132)).strip()
             znuclpsp, zionpsp = read(f, "2d")
             pspso, pspdat, pspcod, pspxc, lmn_size = read(f, "5i")
         unknown1, = read(f, "i")
+        print unknown1
         final_size, = read(f, "i")
         # the size of the next block:
         assert final_size == calcsize("d"+"%d" % (3*natom) +"d2d")
