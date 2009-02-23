@@ -90,7 +90,6 @@ diemac 2.0
         assert head_size == head_size_end
         # the size of the next section:
         head_size, = read(f, "i")
-        print head_size
         assert head_size == calcsize("18i4d3d9d3d")
         (bantot, date, intxc, ixc, natom, ngfft1, ngfft2, ngfft3, nkpt, nspden,
             nspinor, nsppol, nsym, npsp, ntypat, occopt, pertcase, usepaw) = \
@@ -101,7 +100,8 @@ diemac 2.0
         stmbias, tphysel, tsmear = read(f, "3d")
         head_size_end, = read(f, "i")
         assert head_size == head_size_end
-        # XXX: ------ see below:
+        # the size of the next section:
+        head_size, = read(f, "i")
         istwfk = array(read(f, "%di" % nkpt))
         nband = array(read(f, "%di" % nkpt*nsppol))
         npwarr = array(read(f, "%di" % nkpt))
@@ -114,11 +114,10 @@ diemac 2.0
         tnons = reshape(array(read(f, "%dd" % 3*nsym)), (3, nsym))
         znucltypat = array(read(f, "%dd" % ntypat))
         wtk = array(read(f, "%dd" % nkpt))
-        # XXX: I suspect the above from the line down to here is probably
-        # shifted
-        unknown0, = read(f, "d")
-        psp_size, = read(f, "i")
+        head_size_end, = read(f, "i")
+        assert head_size == head_size_end
         # the size of the next block:
+        psp_size, = read(f, "i")
         assert psp_size == calcsize("2d5i")+132
         for ipsp in range(npsp):
             title = (f.read(132)).strip()
