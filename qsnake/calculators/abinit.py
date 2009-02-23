@@ -109,18 +109,18 @@ diemac 2.0
             pspso, pspdat, pspcod, pspxc, lmn_size = read(f, "5i")
         psp_size_end, = read(f, "i")
         assert psp_size == psp_size_end
-        final_size, = read(f, "i")
-        # the size of the next block:
-        assert final_size == calcsize("d"+"%d" % (3*natom) +"d2d")
         if usepaw == 0:
+            final_size, = read(f, "i")
+            # the size of the next block:
+            assert final_size == calcsize("d"+"%d" % (3*natom) +"d2d")
             residm, = read(f, "d")
             xred = reshape(array(read(f, "%dd" % 3*natom)), (3, natom))
             etotal, fermie = read(f, "2d")
+            final_size_end, = read(f, "i")
+            assert final_size == final_size_end
         else:
             raise NotImplementedError("Only reading usepaw == 0 implemented so far")
 
-        # there is one integer here, that I don't know a meaning of:
-        unknown, = read(f, "i")
         rhor_size, = read(f, "i")
         cplex = 1
         assert rhor_size == cplex*ngfft1*ngfft2*ngfft3*calcsize("d")
