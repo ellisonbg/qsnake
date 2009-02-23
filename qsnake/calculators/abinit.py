@@ -113,15 +113,15 @@ diemac 2.0
         wtk = array(read(f, "%dd" % nkpt))
         head_size_end, = read(f, "i")
         assert head_size == head_size_end
-        # the size of the next block:
-        psp_size, = read(f, "i")
-        assert psp_size == calcsize("2d5i")+132
         for ipsp in range(npsp):
+            # the size of the next block:
+            psp_size, = read(f, "i")
+            assert psp_size == calcsize("2d5i")+132
             title = (f.read(132)).strip()
             znuclpsp, zionpsp = read(f, "2d")
             pspso, pspdat, pspcod, pspxc, lmn_size = read(f, "5i")
-        psp_size_end, = read(f, "i")
-        assert psp_size == psp_size_end
+            psp_size_end, = read(f, "i")
+            assert psp_size == psp_size_end
         if usepaw == 0:
             final_size, = read(f, "i")
             # the size of the next block:
@@ -219,7 +219,8 @@ diemac 2.0
         def read_block(f, fmt):
             size, = read(f, "i")
             if size != calcsize(fmt):
-                raise Exception("Invalid format, size != calcsize(fmt).")
+                msg = "Invalid format, size=%d, but calcsize(fmt)=%d."
+                raise Exception(msg % (size, calcsize(fmt)))
             fields = read(f, fmt)
             size_end, = read(f, "i")
             if size != size_end:
