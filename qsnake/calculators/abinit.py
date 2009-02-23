@@ -89,17 +89,19 @@ diemac 2.0
             title = f.read(132)
             znuclpsp, zionpsp = read(f, "2d")
             pspso, pspdat, pspcod, pspxc, lmn_size = read(f, "5i")
-        f.read(26)
-        f.read(6)
+        f.read(24)
         if usepaw == 0:
             residm, = read(f, "d")
             xred = reshape(array(read(f, "%dd" % 3*natom)), (3, natom))
             etotal, fermie = read(f, "2d")
-            print residm, xred, etotal, fermie
         else:
             raise NotImplementedError("Only reading usepaw == 0 implemented so far")
 
+        # there is one integer here, that I don't know a meaning of:
+        unknown, = read(f, "i")
+        rhor_size, = read(f, "i")
         cplex = 1
+        assert rhor_size == cplex*ngfft1*ngfft2*ngfft3*calcsize("d")
         for ispden in range(nspden):
             rhor = array(read(f, "%dd" % cplex*ngfft1*ngfft2*ngfft3))
 
