@@ -45,3 +45,7 @@ class Atom(object):
 
     def __str__(self):
         return "<%s: %s>" % (number2symbol(self._Z), self._position)
+
+    @property
+    def position(self):
+        return self._position

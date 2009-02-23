@@ -55,3 +55,24 @@ class Atoms(object):
         for a in self._atoms:
             s += str(a)+"\n"
         return s
+
+    def get_coordinates(self):
+        """
+        Return a string of coordinates of all atoms.
+
+        >>> from qsnake import Atom
+        >>> a1 = Atom("H", (0, 0, 0))
+        >>> a2 = Atom("H", (0, 0, 1))
+        >>> a3 = Atom("O", (1, 0, 1))
+        >>> atoms = Atoms([a1, a2, a3])
+        >>> print atoms.get_coordinates()  #doctest: +NORMALIZE_WHITESPACE
+        0 0 0
+        0 0 1
+        1 0 1
+
+        """
+
+        s = ""
+        for a in self._atoms:
+            s += "%s %s %s\n" % tuple(a.position)
+        return s
