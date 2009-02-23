@@ -1,5 +1,10 @@
+from struct import calcsize, unpack
+from collections import namedtuple
+
 import os
 from tempfile import mkdtemp
+
+from numpy import array, reshape
 
 class Abinit(object):
 
@@ -48,7 +53,61 @@ diemac 2.0
         r = os.system("cd "+tmp+"; "+self._sage_path+"/local/bin/abinis < a.files > log")
         if r != 0:
             raise RuntimeError("Abinis returned: %d" % r)
+
+        density = self.parse_density(tmp+"/ao_DEN")
         log = file(tmp+"/log").readlines()
         for l in log:
             if l.find("etotal") != -1:
                 print l
+
+    def parse_density(self, filename):
+        def read(f, fmt):
+            return unpack(fmt, f.read(calcsize(fmt)))
+
+        f = file(filename, "rb")
+        codvsn = f.read(18)
+        (headform, fform, bantot, date, intxc, ixc, natom, ngfft1, ngfft2,
+                ngfft3, nkpt, nspden, nspinor, nsppol, nsym, npsp, ntypat,
+                occopt, pertcase, usepaw) = read(f, "20i")
+        ecut, ecutdg, ecutsm, ecut_eff = read(f, "4d")
+        qptn = array(read(f, "3d"))
+        rprimd = reshape(array(read(f, "9d")), (3, 3))
+        stmbias, tphysel, tsmear = read(f, "3d")
+        istwfk = array(read(f, "%di" % nkpt))
+        nband = array(read(f, "%di" % nkpt*nsppol))
+        npwarr = array(read(f, "%di" % nkpt))
+        so_psp = array(read(f, "%di" % npsp))
+        symafm = array(read(f, "%di" % nsym))
+        symrel = reshape(array(read(f, "%di" % 3*3*nsym)), (3, 3, nsym))
+        typat = array(read(f, "%di" % natom))
+        kpt = reshape(array(read(f, "%dd" % 3*nkpt)), (3, nkpt))
+        occ = array(read(f, "%dd" % bantot))
+        tnons = reshape(array(read(f, "%dd" % 3*nsym)), (3, nsym))
+        znucltypat = array(read(f, "%dd" % ntypat))
+        wtk = array(read(f, "%dd" % nkpt))
+        for ipsp in range(npsp):
+            title = f.read(132)
+            znuclpsp, zionpsp = read(f, "2d")
+            pspso, pspdat, pspcod, pspxc, lmn_size = read(f, "5i")
+        f.read(26)
+        f.read(6)
+        if usepaw == 0:
+            residm, = read(f, "d")
+            xred = reshape(array(read(f, "%dd" % 3*natom)), (3, natom))
+            etotal, fermie = read(f, "2d")
+            print residm, xred, etotal, fermie
+        else:
+            raise NotImplementedError("Only reading usepaw == 0 implemented so far")
+
+        cplex = 1
+        for ispden in range(nspden):
+            rhor = array(read(f, "%dd" % cplex*ngfft1*ngfft2*ngfft3))
+
+        density = []
+        i = 0
+        for i3 in range(ngfft3):
+            for i2 in range(ngfft2):
+                for i1 in range(ngfft1):
+                    density.append([i1+1, i2+1, i3+1, rhor[i]])
+                    i += 1
+        return density
