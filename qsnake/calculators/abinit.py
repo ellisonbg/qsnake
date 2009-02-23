@@ -55,6 +55,7 @@ diemac 2.0
             raise RuntimeError("Abinis returned: %d" % r)
 
         result = self.parse_density(tmp+"/ao_DEN")
+        result_wf = self.parse_wf(tmp+"/ao_WFK")
         print "Total energy:", result["header"]["etotal"]
         print "Fermi energy:", result["header"]["fermie"]
         return result
@@ -139,7 +140,10 @@ diemac 2.0
                 "etotal": etotal,
                 "fermie": fermie,
                 "ngfft": array([ngfft1, ngfft2, ngfft3]),
-                "nspden": nspden
+                "nspden": nspden,
+                "nsppol": nsppol,
+                "nkpt": nkpt,
+                "nband": nband,
                 }
 
         return result
@@ -192,3 +196,46 @@ diemac 2.0
                 }
 
         return result
+
+    def parse_wf(self, filename):
+        """
+        Reads the density file from abinit and decodes everything there is in
+        there.
+
+        It's probably fortran implementation dependent. This method assumes,
+        that the following fortran statement:
+
+        write(unit=header) codvsn,headform,fform
+
+        Produces:
+
+        <int: size of the block> <codvsn> <headform> <fform> <int: size of the
+        block again, needs to match the first int>
+
+        """
+        def read(f, fmt):
+            return unpack(fmt, f.read(calcsize(fmt)))
+
+        def read_block(f, fmt):
+            size, = read(f, "i")
+            if size != calcsize(fmt):
+                raise Exception("Invalid format, size != calcsize(fmt).")
+            fields = read(f, fmt)
+            size_end, = read(f, "i")
+            if size != size_end:
+                raise Exception("Invalid format, size != size_end.")
+            return fields
+
+        f = file(filename, "rb")
+        header = self.parse_header(f)
+
+        nsppol = header["nsppol"]
+        nkpt = header["nkpt"]
+        nband = header["nband"]
+
+        for isppol in range(nsppol):
+            for ikpt in range(nkpt):
+                npw, nspinor, nband = read_block(f, "3i")
+                print npw, nspinor, nband
+
+        return header
