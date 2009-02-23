@@ -65,7 +65,7 @@ class Atoms(object):
         >>> a2 = Atom("H", (0, 0, 1))
         >>> a3 = Atom("O", (1, 0, 1))
         >>> atoms = Atoms([a1, a2, a3])
-        >>> print atoms.get_coordinates_str()  #doctest: +NORMALIZE_WHITESPACE
+        >>> print atoms.get_coordinates_str()
         0 0 0
         0 0 1
         1 0 1
@@ -75,4 +75,4 @@ class Atoms(object):
         s = ""
         for a in self._atoms:
             s += "%s %s %s\n" % tuple(a.position)
-        return s
+        return s[:-1]
