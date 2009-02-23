@@ -99,6 +99,8 @@ diemac 2.0
         qptn = array(read(f, "3d"))
         rprimd = reshape(array(read(f, "9d")), (3, 3))
         stmbias, tphysel, tsmear = read(f, "3d")
+        head_size_end, = read(f, "i")
+        assert head_size == head_size_end
         # XXX: ------ see below:
         istwfk = array(read(f, "%di" % nkpt))
         nband = array(read(f, "%di" % nkpt*nsppol))
@@ -114,7 +116,7 @@ diemac 2.0
         wtk = array(read(f, "%dd" % nkpt))
         # XXX: I suspect the above from the line down to here is probably
         # shifted
-        unknown0, unknown01 = read(f, "di")
+        unknown0, = read(f, "d")
         psp_size, = read(f, "i")
         # the size of the next block:
         assert psp_size == calcsize("2d5i")+132
