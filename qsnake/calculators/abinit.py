@@ -94,7 +94,10 @@ diemac 2.0
             title = (f.read(132)).strip()
             znuclpsp, zionpsp = read(f, "2d")
             pspso, pspdat, pspcod, pspxc, lmn_size = read(f, "5i")
-        unknown1, unknown2 = read(f, "ii")
+        unknown1, = read(f, "i")
+        final_size, = read(f, "i")
+        # the size of the next block:
+        assert final_size == calcsize("d"+"%d" % (3*natom) +"d2d")
         if usepaw == 0:
             residm, = read(f, "d")
             xred = reshape(array(read(f, "%dd" % 3*natom)), (3, natom))
