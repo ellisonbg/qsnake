@@ -232,11 +232,21 @@ diemac 2.0
 
         nsppol = header["nsppol"]
         nkpt = header["nkpt"]
-        nband = header["nband"]
 
         for isppol in range(nsppol):
             for ikpt in range(nkpt):
                 npw, nspinor, nband = read_block(f, "3i")
-                print npw, nspinor, nband
+                kg = array(read_block(f, "%d" % (3*npw) +"i"))
+                eigen_occ = read_block(f, "%d" % (2*nband)+"d")
+                eigen = array(eigen_occ[:nband])
+                occ = array(eigen_occ[nband:])
+                for iband in range(nband):
+                    cg = array(read_block(f, "%d" % (2*npw*nspinor)+"d"))
+
+                print "k point: ", ikpt+1
+                print "Eigenvalues:"
+                print eigen
+                print "Occupation numbers:"
+                print occ
 
         return header
