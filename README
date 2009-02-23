@@ -14,6 +14,18 @@ Compilation
 $ cmake .
 $ make
 
+Installation
+------------
+
+First set the installation prefix during the cmake run:
+
+$ cmake -DCMAKE_INSTALL_PREFIX=/tmp/xx .
+
+And then just install it:
+
+$ make
+$ make install
+
 Licensing
 ----------
 
