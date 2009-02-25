@@ -7,6 +7,14 @@ from numpy import array, reshape
 
 from collections import namedtuple
 
+def abinit_present():
+    """
+    Is abinit installed, so that it be used with qsnake? Returns True/False
+    """
+    a = Abinit()
+    a.find_abinit()
+    return os.path.exists(a._abinit_path)
+
 class Abinit(object):
 
     def __init__(self, atoms=None, sage_path=None):
@@ -24,6 +32,10 @@ class Abinit(object):
         self._atoms = atoms
         print "Abinit initialized with the configuration:"
         print atoms
+
+    def find_abinit(self):
+        self.find_sage()
+        self._abinit_path = self._sage_path+"/local/bin/abinis"
 
     def find_sage(self):
         """
