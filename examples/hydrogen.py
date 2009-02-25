@@ -4,6 +4,7 @@ converts it to real space by FFT and plots it using matplotlib.
 """
 
 from numpy import empty
+from scipy import fft
 
 from qsnake import Atom, Atoms
 from qsnake.calculators import Abinit
@@ -15,8 +16,10 @@ abinit = Abinit(atoms)
 result = abinit.calculate()
 d = result["density"]
 
-from scipy import fft
+# convert the density to real space
 d = abs(fft(d))
+
+# plot it:
 max_value = d.max()
 from pylab import imshow, grid, show, subplot, colorbar, title
 subplot(2, 2, 1)
