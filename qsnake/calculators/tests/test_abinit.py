@@ -1,7 +1,7 @@
+from numpy import array
+
 from qsnake import Atom, Atoms
 from qsnake.calculators import Abinit
-
-from numpy import array
 
 from qsnake.calculators.abinit import abinit_present
 if not abinit_present():
