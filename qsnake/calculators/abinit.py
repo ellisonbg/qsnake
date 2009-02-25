@@ -89,8 +89,13 @@ diemac 2.0
         if r != 0:
             raise RuntimeError("Abinis returned: %d" % r)
 
-        result = self.parse_density(tmp+"/ao_DEN")
-        result_wf = self.parse_wf(tmp+"/ao_WFK")
+        header, density = self.parse_density(tmp+"/ao_DEN")
+        header, wf = self.parse_wf(tmp+"/ao_WFK")
+        result = {
+                "header": header,
+                "density": density,
+                "wf": wf,
+                }
         print "Total energy:", result["header"]["etotal"]
         print "Fermi energy:", result["header"]["fermie"]
         return result
@@ -223,14 +228,7 @@ diemac 2.0
                     density.append([i1+1, i2+1, i3+1, rhor[i]])
                     i += 1
 
-        # Let's return some interesting information. We can of course return
-        # more variables above if needed.
-        result = {
-                "density": density,
-                "header": header,
-                }
-
-        return result
+        return header, density
 
     def parse_wf(self, filename):
         """
@@ -284,4 +282,9 @@ diemac 2.0
                 print "Occupation numbers:"
                 print occ
 
-        return header
+        wf = {
+                "eigen": eigen,
+                "occ": occ,
+                }
+
+        return header, wf
