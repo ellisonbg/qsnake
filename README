@@ -14,9 +14,22 @@ Compilation
 $ cmake .
 $ make
 
+How to run abinit
+-----------------
+
+Install abinit into sage and make sure that "sage" is in your path, e.g. if you
+type "sage" in any directory, the Sage program will pop up (this is necessary
+for qsnake to pick up the right paths to abinit). Run tests using "./test" and
+make sure the abinit tests are enabled (if abinit is missing, they are
+automatically disabled). Look into qsnake/calculators/tests/test_abinit.py for
+examples of usage.
+
 Installation
 ------------
 
+You can either use qsnake in tree, then nothing is necessary, you are done.
+
+Or install it out of the tree:
 First set the installation prefix during the cmake run:
 
 $ cmake -DCMAKE_INSTALL_PREFIX=/tmp/xx .
