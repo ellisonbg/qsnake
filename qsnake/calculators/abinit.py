@@ -30,8 +30,6 @@ class Abinit(object):
 
     def init(self, atoms):
         self._atoms = atoms
-        print "Abinit initialized with the configuration:"
-        print atoms
 
     def find_abinit(self):
         self.find_sage()
@@ -84,7 +82,7 @@ diemac 2.0
     list2str(self._atoms.get_atomic_numbers()),
     self._atoms.get_coordinates_str()))
         a_in.close()
-        print "calling abinis in '%s'" % tmp
+        #print "calling abinis in '%s'" % tmp
         r = os.system("cd "+tmp+"; "+self._sage_path+"/local/bin/abinis < a.files > log")
         if r != 0:
             raise RuntimeError("Abinis returned: %d" % r)
@@ -96,8 +94,6 @@ diemac 2.0
                 "density": density,
                 "wf": wf,
                 }
-        print "Total energy:", result["header"]["etotal"]
-        print "Fermi energy:", result["header"]["fermie"]
         return result
 
     def parse_header(self, f):
@@ -275,12 +271,6 @@ diemac 2.0
                 occ = array(eigen_occ[nband:])
                 for iband in range(nband):
                     cg = array(read_block(f, "%d" % (2*npw*nspinor)+"d"))
-
-                print "k point: ", ikpt+1
-                print "Eigenvalues:"
-                print eigen
-                print "Occupation numbers:"
-                print occ
 
         wf = {
                 "eigen": eigen,
