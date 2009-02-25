@@ -1,3 +1,8 @@
+"""
+This example calculates two H atoms, reads the charge density from abinit,
+converts it to real space by FFT and plots it using matplotlib.
+"""
+
 from numpy import empty
 
 from qsnake import Atom, Atoms
@@ -7,12 +12,8 @@ a1 = Atom("H", (0, 0, -1))
 a2 = Atom("H", (0, 0, 1))
 atoms = Atoms([a1, a2])
 abinit = Abinit(atoms)
-r = abinit.calculate()
-d = empty((30, 30, 30), dtype="double")
-for a in r["density"]:
-    i, j, k = a[:3]
-    value = a[3]
-    d[i-1, j-1, k-1] = value
+result = abinit.calculate()
+d = result["density"]
 
 from scipy import fft
 d = abs(fft(d))

@@ -3,7 +3,7 @@ import os
 from tempfile import mkdtemp
 from subprocess import Popen, PIPE
 
-from numpy import array, reshape
+from numpy import array, reshape, empty
 
 from collections import namedtuple
 
@@ -216,12 +216,17 @@ diemac 2.0
         rhor_size_end, = read(f, "i")
         assert rhor_size == rhor_size_end
 
-        density = []
+        # the code below basically does this one thing:
+        #   density = rhor.reshape((ngfft1, ngfft2, ngfft3))
+        # but it needs to be arranged exactly according to the abinit
+        # documentation, so it's better to do it by hand (just using the
+        # .reshape() doesn't work):
+        density = empty((ngfft1, ngfft2, ngfft3), dtype="double")
         i = 0
         for i3 in range(ngfft3):
             for i2 in range(ngfft2):
                 for i1 in range(ngfft1):
-                    density.append([i1+1, i2+1, i3+1, rhor[i]])
+                    density[i1, i2, i3] = rhor[i]
                     i += 1
 
         return header, density
