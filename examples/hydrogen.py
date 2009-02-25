@@ -17,7 +17,7 @@ atoms = Atoms([
     Atom("H", (0, 0.5, 0)),
     ])
 abinit = Abinit(atoms)
-result = abinit.calculate()
+result = abinit.calculate(verbose=True)
 d = result["density"]
 
 # convert the density to real space

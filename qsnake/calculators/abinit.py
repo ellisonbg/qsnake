@@ -45,7 +45,7 @@ class Abinit(object):
             if path != "":
                 self._sage_path = path
 
-    def calculate(self):
+    def calculate(self, verbose=False):
         self.find_sage()
         def list2str(l):
             l = [str(x) for x in l]
@@ -82,7 +82,8 @@ diemac 2.0
     list2str(self._atoms.get_atomic_numbers()),
     self._atoms.get_coordinates_str()))
         a_in.close()
-        #print "calling abinis in '%s'" % tmp
+        if verbose:
+            print "calling abinis in '%s'" % tmp
         r = os.system("cd "+tmp+"; "+self._sage_path+"/local/bin/abinis < a.files > log")
         if r != 0:
             raise RuntimeError("Abinis returned: %d" % r)
