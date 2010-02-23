@@ -8,3 +8,7 @@ from intmesh import (
     IntMesh,
     GLIntMesh
 )
+
+from bsplineset import (
+    BSplineGenerator
+)

@@ -116,3 +116,5 @@ class GLIntMesh(IntMesh):
             lspp = len(shifted_p_points)
             self._mesh_points[i * lspp : (i + 1)*lspp] = shifted_p_points
             self._mesh_weights[i * lspp : (i + 1)*lspp] = p_weights*scale
+
+__all__ = [IntMesh, GLIntMesh]
